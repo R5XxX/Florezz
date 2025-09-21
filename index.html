@@ -6,9 +6,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Jocelyn - Día de las flores amarillas</title>
   <style>
-    :root{ --bg-accent: #fcfcec; }
-    *{box-sizing:border-box}
-    html,body{height:100%;margin:0;font-family:'Georgia', serif;overflow:hidden}
+    :root{ --bg-accent:#fcfcec; }
+    *{box-sizing:border-box;}
+    html,body{height:100%;margin:0;font-family:'Georgia', serif;overflow:hidden;}
     body{
       background-image:url('https://i.imgur.com/umhxdOx.jpeg');
       background-size:cover;
@@ -18,24 +18,24 @@
       align-items:flex-start;
       justify-content:center;
       color:#000;
+      position:relative;
     }
-    .overlay-dark{position:absolute;inset:0;background:rgba(0,0,0,0.25);}
     .page{
       position:relative;
+      z-index:10;
       width:100%;
       height:100vh;
       display:flex;
       flex-direction:column;
       align-items:center;
       gap:20px;
-      padding-top:60px;
-      z-index:1;
+      padding-top:80px;
     }
     .top-text{
       font-size:clamp(18px,4vw,48px);
       letter-spacing:1px;
       color:black;
-      text-shadow:0 1px 2px rgba(255,255,255,0.6);
+      text-shadow:2px 2px 6px rgba(255,255,255,0.8);
       white-space:nowrap;
       overflow:hidden;
       border-right:2px solid rgba(0,0,0,0);
@@ -55,6 +55,8 @@
       transform:scale(0.95);
       transition:all 300ms ease;
       box-shadow:0 0 0 rgba(252,252,236,0);
+      z-index:11;
+      position:relative;
     }
     #dameButton.show{
       opacity:1;
@@ -66,7 +68,7 @@
       50%{box-shadow:0 0 18px rgba(255,255,200,0.9);transform:scale(1.03);}
       100%{box-shadow:0 0 6px rgba(255,255,200,0.0);transform:scale(1);}
     }
-    #emojiContainer{position:absolute;inset:0;pointer-events:none;z-index:5;overflow:hidden;}
+    #emojiContainer{position:absolute;inset:0;pointer-events:none;z-index:12;overflow:hidden;}
     .emoji{
       position:absolute;
       top:-80px;
@@ -86,7 +88,7 @@
       display:none;
       align-items:center;
       justify-content:center;
-      z-index:6;
+      z-index:15;
       background:rgba(252,252,236,0.95);
     }
     #countBox{
@@ -105,7 +107,7 @@
       width:min(90vw,1000px);
       height:auto;
       display:none;
-      z-index:7;
+      z-index:20;
       border-radius:12px;
       box-shadow:0 12px 40px rgba(0,0,0,0.35);
     }
@@ -113,7 +115,6 @@
   </style>
 </head>
 <body>
-  <div class="overlay-dark"></div>
   <div class="page">
     <div id="topText" class="top-text" aria-live="polite"></div>
     <button id="dameButton" aria-label="Dame clickk">𝑫𝒂𝒎𝒆 𝒄𝒍𝒊𝒄𝒌𝒌</button>
@@ -191,5 +192,27 @@ function showCountdown(seconds){
       clearInterval(iv);
       countOverlay.style.display='none';
       countOverlay.setAttribute('aria-hidden','true');
-      stop
+      stopEmojis();
+      showVideo();
+    } else {
+      countNumber.textContent=n;
+    }
+  },1000);
+}
 
+function showVideo(){
+  userVideo.style.display='block';
+  userVideo.play().catch(()=>{});
+}
+
+dameBtn.addEventListener('click',()=>{
+  dameBtn.style.display='none';
+  startEmojis();
+  showCountdown(5);
+});
+
+setTimeout(()=>{bgAudio.play().catch(()=>{});},1000);
+
+  </script>
+</body>
+</html>
