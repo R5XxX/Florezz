@@ -30,7 +30,7 @@ body{
   font-size:clamp(36px,6vw,72px);
   letter-spacing:1px;
   color:black;
-  text-shadow:2px 2px 6px rgba(255,255,255,0.8);
+  text-shadow:2px 2px 8px rgba(255,255,255,0.9);
   white-space:nowrap;
   overflow:hidden;
   border-right:2px solid rgba(0,0,0,0);
@@ -147,7 +147,7 @@ const countNumber=document.getElementById('countDownNumber');
 const userVideo=document.getElementById('userVideo');
 const bgAudio=document.getElementById('bgAudio');let typingSpeed=70; let emojiInterval; let emojiRunning=false;
 
-function startTyping(){ topText.textContent=''; let i=0; const t=setInterval(()=>{ topText.textContent+=chars[i]??''; i++; if(i>=chars.length){ clearInterval(t); dameBtn.classList.add('show'); startEmojis(); bgAudio.play().catch(()=>{}); } },typingSpeed); }
+function startTyping(){ topText.textContent=''; let i=0; const t=setInterval(()=>{ topText.textContent+=chars[i]??''; i++; if(i>=chars.length){ clearInterval(t); dameBtn.classList.add('show'); } },typingSpeed); }
 
 function startEmojis(){ if(emojiRunning) return; emojiRunning=true; emojiInterval=setInterval(()=>{createEmoji();},220); } function stopEmojis(){clearInterval(emojiInterval);emojiRunning=false;}
 
@@ -159,9 +159,7 @@ function showVideo(){ userVideo.style.display='block'; userVideo.play().catch(()
 
 function resetAnimation(){ repeatBtn.classList.remove('show'); userVideo.pause(); userVideo.currentTime=0; startTyping(); }
 
-dameBtn.addEventListener('click',()=>{ dameBtn.classList.remove('show'); showCountdown(5); });
-
-repeatBtn.addEventListener('click',()=>{ resetAnimation(); });
+// Activar música y emojis al primer click del usuario let firstClick=false; document.body.addEventListener('click',()=>{ if(!firstClick){ firstClick=true; bgAudio.play().catch(()=>{}); startEmojis(); } });
 
 startTyping(); </script>
 
