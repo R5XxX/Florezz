@@ -11,9 +11,9 @@
     body{background-image:url('https://i.imgur.com/umhxdOx.jpeg');background-size:cover;background-position:center;display:flex;flex-direction:column}
     .safe-area{padding:env(safe-area-inset-top,12px) 12px 12px;display:flex;flex-direction:column;flex:1}/* Texto superior */
 .top-wrap{width:100%;display:flex;justify-content:flex-start;align-items:flex-start;}
-.typing-box{max-width:96%;overflow:hidden;white-space:nowrap}
-.typing-text{display:inline-block;font-style:italic;letter-spacing:1px;line-height:1; 
-  font-size:clamp(20px,6.5vw,36px);color:#111;text-shadow:0 1px 0 rgba(255,255,255,0.6)}
+.typing-box{max-width:96%;white-space:pre-line}
+.typing-text{display:inline-block;font-style:italic;letter-spacing:1px;line-height:1.3; 
+  font-size:clamp(26px,8vw,42px);color:#111;text-shadow:0 1px 0 rgba(255,255,255,0.6)}
 
 /* Botón inferior dentro de la imagen */
 .bottom-area{margin-top:auto;display:flex;justify-content:center;padding:18px}
@@ -25,7 +25,6 @@
 
 /* Emoticons falling */
 .emoji{position:fixed;z-index:60;font-size:26px;pointer-events:none;user-select:none}
-@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
 
 /* Modal / cuadro central */
 .modal{position:fixed;inset:6% 6%;background:var(--btn-bg);border:4px solid #000;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:12px;box-sizing:border-box}
@@ -37,10 +36,6 @@ video{width:100%;height:auto;max-height:60vh;border:3px solid #000;background:#0
 /* repetir button */
 .repeat{margin-top:10px}
 
-/* small helper */
-.sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
-
-/* Make sure content never overflows horizontally */
 *{box-sizing:border-box}
 
   </style>
@@ -55,7 +50,7 @@ video{width:100%;height:auto;max-height:60vh;border:3px solid #000;background:#0
   <button id="mainBtn" class="btn" aria-hidden="true">𝑫𝒂𝒎𝒆 𝒄𝒍𝒊𝒄𝒌𝒌</button>
 </div>
 
-  </div>  <!-- modal central que aparece al dar click -->  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+  </div>  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
     <div id="modalInner">
       <div id="countdown" class="countdown">5</div>
       <div id="videoArea" class="video-wrap" style="display:none">
@@ -65,13 +60,11 @@ video{width:100%;height:auto;max-height:60vh;border:3px solid #000;background:#0
         <button id="repeatBtn" class="btn repeat" style="display:none">repetir</button>
       </div>
     </div>
-  </div><audio id="bgAudio" loop preload="auto" src="https://www.dropbox.com/s/c8682aezsuvkfmwcdixd1/Eres_mixed.mp3?dl=1"></audio>
+  </div><audio id="bgAudio" loop preload="auto" src="https://www.dropbox.com/scl/fi/c8682aezsuvkfmwcdixd1/Eres_mixed.mp3?rlkey=bs0i3nubrleqn7ql1xx6ctk9n&dl=1"></audio>
 
   <script>
-    // Texto que se va a escribir
-    const textToType = '𝑯𝒐𝒍𝒂 𝑱𝒐𝒄𝒆𝒍𝒊𝒏𝒄𝒊𝒕𝒂 𝒃𝒐𝒏𝒊𝒕𝒂 𝒑𝒂𝒓𝒂 𝒕𝒊 🫶🏼';
+    const textToType = '𝑯𝒐𝒍𝒂 𝑱𝒐𝒄𝒆𝒍𝒊𝒏𝒄𝒊𝒕𝒂 𝒃𝒐𝒏𝒊𝒕𝒂\n𝒑𝒂𝒓𝒂 𝒕𝒊 🫶🏼';
     const typingTextEl = document.getElementById('typingText');
-    const typingBox = document.getElementById('typingBox');
     const btn = document.getElementById('mainBtn');
     const audio = document.getElementById('bgAudio');
     const modal = document.getElementById('modal');
@@ -79,69 +72,46 @@ video{width:100%;height:auto;max-height:60vh;border:3px solid #000;background:#0
     const video = document.getElementById('mainVideo');
     const videoSrc = 'https://i.imgur.com/uYiwYzE.mp4';
     const repeatBtn = document.getElementById('repeatBtn');
-
-    // Estado
     let typingDone = false;
 
-    // utility: spawn a falling emoji element
     function spawnEmoji(xPercent, emoji, duration=3000){
       const el = document.createElement('div');
       el.className = 'emoji';
       el.style.left = xPercent + '%';
       el.style.top = '-6vh';
-      el.style.fontSize = (18 + Math.random()*26) + 'px';
+      el.style.fontSize = (20 + Math.random()*24) + 'px';
       el.textContent = emoji;
-      const dur = duration/1000;
-      const rot = Math.random()*360;
-      el.style.transition = 'transform linear ' + (dur) + 's, opacity ' + (dur) + 's';
-      el.style.willChange = 'transform,opacity';
       document.body.appendChild(el);
-      // trigger animation using requestAnimationFrame
-      requestAnimationFrame(()=>{
-        el.style.transform = 'translateY(110vh) rotate('+ (rot + 360) +'deg)';
-        el.style.opacity = '0';
-      });
-      setTimeout(()=>el.remove(), duration+200);
+      el.animate([
+        { transform: `translateY(0) rotate(0deg)`, opacity:1 },
+        { transform: `translateY(110vh) rotate(360deg)`, opacity:0 }
+      ], { duration, easing:"linear" });
+      setTimeout(()=>el.remove(), duration);
     }
 
-    // spawn multiple emojis randomly across the top
     function spawnFallingEmojisBurst(count=10, duration=3000){
       const emojis = ['🏵','🌼'];
       for(let i=0;i<count;i++){
         const left = Math.random()*100;
         const emoji = emojis[Math.floor(Math.random()*emojis.length)];
-        setTimeout(()=>spawnEmoji(left,emoji,duration), Math.random()*200);
+        setTimeout(()=>spawnEmoji(left,emoji,duration), Math.random()*300);
       }
     }
 
-    // typewriter effect left-to-right
     async function typeWriter(){
       typingTextEl.textContent = '';
       const chars = Array.from(textToType);
       for(let i=0;i<chars.length;i++){
         typingTextEl.textContent += chars[i];
-        // ensure it doesn't overflow: scale down if needed
         await new Promise(r=>setTimeout(r, 80));
       }
       typingDone = true;
-      // try to play audio - browsers may block autoplay with sound; handle promise
-      try{
-        await audio.play();
-      }catch(e){
-        // if blocked, show small unobtrusive play hint on button
-        btn.textContent = '𝑫𝒂𝒎𝒆 𝒄𝒍𝒊𝒄𝒌𝒌';
-      }
-      // show button with glow and spawn falling emojis for ~3s
+      try{ await audio.play(); }catch(e){}
       btn.classList.add('glow');
-      // show short burst of emojis
-      spawnFallingEmojisBurst(12,3000);
-      // create a few longer slightly-delayed ones to feel lively
-      setTimeout(()=>spawnFallingEmojisBurst(6,2500), 250);
+      spawnFallingEmojisBurst(15,3000);
     }
 
-    // Reset to initial state
     function resetAll(){
-      // hide modal
       modal.classList.add('hidden');
       document.querySelectorAll('.emoji').forEach(e=>e.remove());
       repeatBtn.style.display='none';
@@ -153,84 +123,52 @@ video{width:100%;height:auto;max-height:60vh;border:3px solid #000;background:#0
       btn.disabled=false;
       btn.classList.remove('glow');
       typingDone=false;
-      // restart typing and audio from beginning
       audio.currentTime=0;
       typeWriter();
     }
 
-    // When main button clicked -> show modal and start countdown
     btn.addEventListener('click', async function(){
-      if(!typingDone) return; // safety
-      // ensure bg audio is playing; try again
+      if(!typingDone) return;
       try{ await audio.play(); }catch(e){}
       btn.classList.remove('glow');
-      // spawn some emoji effect immediately too
       spawnFallingEmojisBurst(10,3000);
-
-      // show modal
       modal.classList.remove('hidden');
-
-      // countdown 5 -> 0 with emojis falling randomly for 5s
       let time = 5;
       countdownEl.textContent = time;
-
-      // during countdown spawn emojis randomly across screen
       const emojiInterval = setInterval(()=>{
         const x = Math.random()*100;
         const e = Math.random()>0.5?'🏵':'🌼';
         spawnEmoji(x,e,2500);
       }, 200);
-
       const timerInterval = setInterval(()=>{
         time--;
         if(time>=0) countdownEl.textContent = time;
         if(time<0){
           clearInterval(timerInterval);
           clearInterval(emojiInterval);
-          // after countdown show video in loop and show repetir button
           showVideoAndRepeat();
         }
       }, 1000);
     });
 
     function showVideoAndRepeat(){
-      // hide countdown and show video
       countdownEl.style.display='none';
       const videoArea = document.getElementById('videoArea');
       videoArea.style.display='flex';
       video.src = videoSrc;
       video.loop = true;
       video.muted = false;
-      // try to play video; some mobile browsers require user interaction (we had button click)
       video.play().catch(()=>{});
       repeatBtn.style.display='inline-block';
-      repeatBtn.onclick = ()=>{
-        // reproduce from beginning: reset audio and UI
-        audio.currentTime=0; audio.play().catch(()=>{});
-        resetAll();
-      };
+      repeatBtn.onclick = ()=>{ audio.currentTime=0; audio.play().catch(()=>{}); resetAll(); };
     }
 
-    // when page loads, hide main button until typing finishes
     (function init(){
       btn.style.display='none';
-      // show button after typing finishes
       typeWriter().then(()=>{ btn.style.display='inline-block'; });
-
-      // make sure button is accessible and styles ok on mobile
-      btn.addEventListener('touchstart', ()=>{btn.style.transform='translateY(-1px)';}, {passive:true});
-      btn.addEventListener('touchend', ()=>{btn.style.transform='translateY(0)';}, {passive:true});
-
-      // small accessibility: if audio playback blocked, clicking any button should start audio
       document.addEventListener('click', async function onFirstClick(){
-        if(audio.paused){
-          try{ await audio.play(); }catch(e){}
-        }
+        if(audio.paused){ try{ await audio.play(); }catch(e){} }
       }, {once:true});
     })();
-
-    // prevent horizontal overflow on very small screens
-    window.addEventListener('resize', ()=>{ document.body.style.height = window.innerHeight + 'px'; });
-    document.body.style.height = window.innerHeight + 'px';
   </script></body>
 </html>
