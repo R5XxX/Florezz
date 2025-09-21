@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Página móvil - lluvia de flores mejorada</title>
+  <title>Página móvil - lluvia de flores funcional</title>
   <style>
     :root{--btn-bg:#fcfcec;--btn-text:#000;}
     html,body{height:100%;margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial}
@@ -161,7 +161,10 @@ btn.addEventListener('click', async function(){
   if(!typingDone) return;
   try{ await audio.play(); }catch(e){}
   btn.classList.remove('glow');
-  spawnFallingEmojisBurst(10,5000);
+
+  // Lluvia al hacer click con la misma función mejorada
+  spawnMultipleEmojiBursts(5,10,4000,6000,300);
+
   modal.classList.remove('hidden');
   let time=5;
   countdownEl.textContent=time;
