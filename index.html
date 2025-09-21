@@ -2,165 +2,235 @@
 
 <html lang="es">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Jocelyn - Día de las flores amarillas</title>
-<style>
-:root{--bg-accent:#fcfcec;}
-*{box-sizing:border-box;}
-html,body{height:100%;margin:0;font-family:'Georgia', serif;overflow:hidden;}
-body{
-  background-image:url('https://i.imgur.com/umhxdOx.jpeg');
-  background-size:cover;
-  background-position:center;
-  background-repeat:no-repeat;
-  position:relative;
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Página móvil - una sola archivo</title>
+  <style>
+    :root{--btn-bg:#fcfcec;--btn-text:#000;}
+    html,body{height:100%;margin:0;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial}
+    body{background-image:url('https://i.imgur.com/umhxdOx.jpeg');background-size:cover;background-position:center;display:flex;flex-direction:column}
+    .safe-area{padding:env(safe-area-inset-top,12px) 12px 12px;display:flex;flex-direction:column;flex:1}/* Texto superior */
+.top-wrap{width:100%;display:flex;justify-content:flex-start;align-items:flex-start;}
+.typing-box{max-width:96%;overflow:hidden;white-space:nowrap}
+.typing-text{display:inline-block;font-style:italic;letter-spacing:1px;line-height:1; 
+  font-size:clamp(20px,6.5vw,36px);color:#111;text-shadow:0 1px 0 rgba(255,255,255,0.6)}
+
+/* Botón inferior dentro de la imagen */
+.bottom-area{margin-top:auto;display:flex;justify-content:center;padding:18px}
+.btn{
+  background:var(--btn-bg);color:var(--btn-text);border-radius:18px;border:3px solid #000;padding:12px 18px;font-weight:700;font-size:18px;box-shadow:0 0 0 rgba(252,252,236,0);transition:box-shadow .25s,transform .12s;touch-action:manipulation
 }
-.page{
-  position:relative;
-  width:100%;
-  height:100vh;
-}
-.top-text{
-  position:absolute;
-  top:20px;
-  left:50%;
-  transform:translateX(-50%);
-  font-size:clamp(36px,5vw,64px);
-  color:black;
-  text-align:center;
-  text-shadow:2px 2px 8px rgba(255,255,255,0.9);
-  white-space:normal;
-  max-width:90%;
-  word-break:break-word;
-  z-index:15;
-}
-button{
-  position:fixed;
-  bottom:30px;
-  left:50%;
-  transform:translateX(-50%);
-  padding:12px 22px;
-  background:var(--bg-accent);
-  color:#000;
-  border:3px solid #000;
-  border-radius:28px;
-  font-size:18px;
-  cursor:pointer;
-  opacity:0;
-  transform:translateX(-50%) scale(0.95);
-  transition:all 300ms ease;
-  z-index:20;
-}
-button.show{
-  opacity:1;
-  transform:translateX(-50%) scale(1);
-  animation:glow 1.5s infinite;
-}
-@keyframes glow{
-  0%{box-shadow:0 0 6px rgba(255,255,200,0);}
-  50%{box-shadow:0 0 18px rgba(255,255,200,0.9);}
-  100%{box-shadow:0 0 6px rgba(255,255,200,0);}
-}
-#emojiContainer{
-  position:absolute;inset:0;
-  pointer-events:none;
-  z-index:10;
-  overflow:hidden;
-}
-.emoji{
-  position:absolute;
-  top:-80px;
-  font-size:28px;
-  user-select:none;
-  animation-name:fall,sway,spin;
-  animation-timing-function:linear;
-  animation-iteration-count:1;
-  opacity:0.95;
-}
-@keyframes fall{to{transform:translateY(120vh);opacity:0.8;}}
-@keyframes sway{0%{transform:translateY(0) translateX(0);}50%{transform:translateY(50vh) translateX(14px);}100%{transform:translateY(120vh) translateX(-10px);}}
-@keyframes spin{0%{transform:rotate(0);}100%{transform:rotate(360deg);}}
-#countOverlay{
-  position:absolute;
-  inset:0;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  z-index:25;
-  background:rgba(252,252,236,0.95);
-}
-#countBox{
-  background:var(--bg-accent);
-  padding:36px 44px;
-  border-radius:16px;
-  border:3px solid #000;
-  box-shadow:0 8px 30px rgba(0,0,0,0.15);
-  text-align:center;
-}
-#countDownNumber{font-size:64px;font-weight:700;color:#000;}
-#userVideo{
-  position:absolute;
-  inset:0;
-  margin:auto;
-  width:min(90vw,1000px);
-  height:auto;
-  display:none;
-  z-index:30;
-  border-radius:12px;
-  box-shadow:0 12px 40px rgba(0,0,0,0.35);
-}
-#bgAudio{display:none;}
-</style>
+.btn.glow{animation:glow 1.2s ease-in-out infinite}
+@keyframes glow{0%{box-shadow:0 0 0 rgba(0,0,0,0)}50%{box-shadow:0 6px 24px rgba(252,252,236,0.9);transform:translateY(-2px)}100%{box-shadow:0 0 0 rgba(0,0,0,0)}}
+
+/* Emoticons falling */
+.emoji{position:fixed;z-index:60;font-size:26px;pointer-events:none;user-select:none}
+@keyframes fall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
+
+/* Modal / cuadro central */
+.modal{position:fixed;inset:6% 6%;background:var(--btn-bg);border:4px solid #000;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:100;padding:12px;box-sizing:border-box}
+.modal.hidden{display:none}
+.countdown{font-size:clamp(28px,10vw,56px);font-weight:800;margin:8px;text-align:center}
+.video-wrap{width:100%;flex:1;display:flex;align-items:center;justify-content:center}
+video{width:100%;height:auto;max-height:60vh;border:3px solid #000;background:#000}
+
+/* repetir button */
+.repeat{margin-top:10px}
+
+/* small helper */
+.sr-only{position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px,1px,1px,1px);white-space:nowrap}
+
+/* Make sure content never overflows horizontally */
+*{box-sizing:border-box}
+
+  </style>
 </head>
 <body>
-<div class="page">
-  <div id="topText" class="top-text" aria-live="polite"></div>
-  <button id="dameButton">𝑫𝒂𝒎𝒆 𝒄𝒍𝒊𝒄𝒌𝒌</button>
-  <button id="repeatButton">Repetir</button>
+  <div class="safe-area">
+    <div class="top-wrap">
+      <div class="typing-box" id="typingBox">
+        <span class="typing-text" id="typingText"></span>
+      </div>
+    </div><div class="bottom-area">
+  <button id="mainBtn" class="btn" aria-hidden="true">𝑫𝒂𝒎𝒆 𝒄𝒍𝒊𝒄𝒌𝒌</button>
 </div>
-<div id="emojiContainer"></div>
-<div id="countOverlay">
-  <div id="countBox">
-    <div id="countDownNumber">5</div>
-    <div style="margin-top:8px;font-size:16px;color:#333">Preparando el video...</div>
-  </div>
-</div>
-<video id="userVideo" loop playsinline muted>
-  <source src="https://i.imgur.com/uYiwYzE.mp4" type="video/mp4">
-</video>
-<audio id="bgAudio" loop>
-  <source src="https://www.dropbox.com/scl/fi/c8682aezsuvkfmwcdixd1/Eres_mixed.mp3?rlkey=bs0i3nubrleqn7ql1xx6ctk9n&st=uvq642vs&dl=1" type="audio/mpeg">
-</audio>
-<script>
-const text="𝑯𝒐𝒍𝒂 𝑱𝒐𝒄𝒆𝒍𝒊𝒏𝒄𝒊𝒕𝒂 𝒃𝒐𝒏𝒊𝒕𝒂 𝒑𝒂𝒓𝒂 𝒕𝒊 🫶🏼";
-const chars=Array.from(text);
-const topText=document.getElementById('topText');
-const dameBtn=document.getElementById('dameButton');
-const repeatBtn=document.getElementById('repeatButton');
-const emojiContainer=document.getElementById('emojiContainer');
-const countOverlay=document.getElementById('countOverlay');
-const countNumber=document.getElementById('countDownNumber');
-const userVideo=document.getElementById('userVideo');
-const bgAudio=document.getElementById('bgAudio');let typingSpeed=70; let emojiInterval; let emojiRunning=false;
 
-function startTyping(){ topText.textContent=''; let i=0; const t=setInterval(()=>{ topText.textContent+=chars[i]??''; i++; if(i>=chars.length){ clearInterval(t); dameBtn.classList.add('show'); } },typingSpeed); }
+  </div>  <!-- modal central que aparece al dar click -->  <div id="modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div id="modalInner">
+      <div id="countdown" class="countdown">5</div>
+      <div id="videoArea" class="video-wrap" style="display:none">
+        <video id="mainVideo" loop playsinline muted></video>
+      </div>
+      <div style="width:100%;display:flex;justify-content:center">
+        <button id="repeatBtn" class="btn repeat" style="display:none">repetir</button>
+      </div>
+    </div>
+  </div><audio id="bgAudio" loop preload="auto" src="https://www.dropbox.com/s/c8682aezsuvkfmwcdixd1/Eres_mixed.mp3?dl=1"></audio>
 
-function startEmojis(){ if(emojiRunning) return; emojiRunning=true; emojiInterval=setInterval(()=>{createEmoji();},220); } function stopEmojis(){clearInterval(emojiInterval);emojiRunning=false;}
+  <script>
+    // Texto que se va a escribir
+    const textToType = '𝑯𝒐𝒍𝒂 𝑱𝒐𝒄𝒆𝒍𝒊𝒏𝒄𝒊𝒕𝒂 𝒃𝒐𝒏𝒊𝒕𝒂 𝒑𝒂𝒓𝒂 𝒕𝒊 🫶🏼';
+    const typingTextEl = document.getElementById('typingText');
+    const typingBox = document.getElementById('typingBox');
+    const btn = document.getElementById('mainBtn');
+    const audio = document.getElementById('bgAudio');
+    const modal = document.getElementById('modal');
+    const countdownEl = document.getElementById('countdown');
+    const video = document.getElementById('mainVideo');
+    const videoSrc = 'https://i.imgur.com/uYiwYzE.mp4';
+    const repeatBtn = document.getElementById('repeatBtn');
 
-const emojiChoices=['🏵','🌼']; function createEmoji(){ const el=document.createElement('div'); el.className='emoji'; el.textContent=emojiChoices[Math.floor(Math.random()*emojiChoices.length)]; const startX=Math.random()*100; const size=18+Math.random()*36; el.style.left=startX+'vw'; el.style.fontSize=size+'px'; const duration=3500+Math.random()*4500; el.style.animationDuration=duration+'ms'; emojiContainer.appendChild(el); setTimeout(()=>{el.remove();},duration+200); }
+    // Estado
+    let typingDone = false;
 
-function showCountdown(seconds){ countOverlay.style.display='flex'; countNumber.textContent=seconds; let n=seconds; const iv=setInterval(()=>{ n--; if(n<0){ clearInterval(iv); countOverlay.style.display='none'; stopEmojis(); showVideo(); setTimeout(()=>{repeatBtn.classList.add('show');},5000); } else { countNumber.textContent=n; } },1000); }
+    // utility: spawn a falling emoji element
+    function spawnEmoji(xPercent, emoji, duration=3000){
+      const el = document.createElement('div');
+      el.className = 'emoji';
+      el.style.left = xPercent + '%';
+      el.style.top = '-6vh';
+      el.style.fontSize = (18 + Math.random()*26) + 'px';
+      el.textContent = emoji;
+      const dur = duration/1000;
+      const rot = Math.random()*360;
+      el.style.transition = 'transform linear ' + (dur) + 's, opacity ' + (dur) + 's';
+      el.style.willChange = 'transform,opacity';
+      document.body.appendChild(el);
+      // trigger animation using requestAnimationFrame
+      requestAnimationFrame(()=>{
+        el.style.transform = 'translateY(110vh) rotate('+ (rot + 360) +'deg)';
+        el.style.opacity = '0';
+      });
+      setTimeout(()=>el.remove(), duration+200);
+    }
 
-function showVideo(){ userVideo.style.display='block'; userVideo.play().catch(()=>{}); }
+    // spawn multiple emojis randomly across the top
+    function spawnFallingEmojisBurst(count=10, duration=3000){
+      const emojis = ['🏵','🌼'];
+      for(let i=0;i<count;i++){
+        const left = Math.random()*100;
+        const emoji = emojis[Math.floor(Math.random()*emojis.length)];
+        setTimeout(()=>spawnEmoji(left,emoji,duration), Math.random()*200);
+      }
+    }
 
-function resetAnimation(){ repeatBtn.classList.remove('show'); userVideo.pause(); userVideo.currentTime=0; startTyping(); }
+    // typewriter effect left-to-right
+    async function typeWriter(){
+      typingTextEl.textContent = '';
+      const chars = Array.from(textToType);
+      for(let i=0;i<chars.length;i++){
+        typingTextEl.textContent += chars[i];
+        // ensure it doesn't overflow: scale down if needed
+        await new Promise(r=>setTimeout(r, 80));
+      }
+      typingDone = true;
+      // try to play audio - browsers may block autoplay with sound; handle promise
+      try{
+        await audio.play();
+      }catch(e){
+        // if blocked, show small unobtrusive play hint on button
+        btn.textContent = '𝑫𝒂𝒎𝒆 𝒄𝒍𝒊𝒄𝒌𝒌';
+      }
+      // show button with glow and spawn falling emojis for ~3s
+      btn.classList.add('glow');
+      // show short burst of emojis
+      spawnFallingEmojisBurst(12,3000);
+      // create a few longer slightly-delayed ones to feel lively
+      setTimeout(()=>spawnFallingEmojisBurst(6,2500), 250);
+    }
 
-// Botón dame clickk siempre activa música, emojis y cuenta regresiva dameBtn.addEventListener('click',()=>{ // Primer toque activa música y emojis si no se ha hecho aún if(!emojiRunning){ bgAudio.play().catch(()=>{}); startEmojis(); } dameBtn.classList.remove('show'); showCountdown(5); });
+    // Reset to initial state
+    function resetAll(){
+      // hide modal
+      modal.classList.add('hidden');
+      document.querySelectorAll('.emoji').forEach(e=>e.remove());
+      repeatBtn.style.display='none';
+      document.getElementById('videoArea').style.display='none';
+      video.pause();video.removeAttribute('src');video.load();
+      countdownEl.style.display='block';
+      countdownEl.textContent='5';
+      btn.style.display='flex';
+      btn.disabled=false;
+      btn.classList.remove('glow');
+      typingDone=false;
+      // restart typing and audio from beginning
+      audio.currentTime=0;
+      typeWriter();
+    }
 
-repeatBtn.addEventListener('click',()=>{ resetAnimation(); });
+    // When main button clicked -> show modal and start countdown
+    btn.addEventListener('click', async function(){
+      if(!typingDone) return; // safety
+      // ensure bg audio is playing; try again
+      try{ await audio.play(); }catch(e){}
+      btn.classList.remove('glow');
+      // spawn some emoji effect immediately too
+      spawnFallingEmojisBurst(10,3000);
 
-startTyping(); </script>
+      // show modal
+      modal.classList.remove('hidden');
 
-</body>
+      // countdown 5 -> 0 with emojis falling randomly for 5s
+      let time = 5;
+      countdownEl.textContent = time;
+
+      // during countdown spawn emojis randomly across screen
+      const emojiInterval = setInterval(()=>{
+        const x = Math.random()*100;
+        const e = Math.random()>0.5?'🏵':'🌼';
+        spawnEmoji(x,e,2500);
+      }, 200);
+
+      const timerInterval = setInterval(()=>{
+        time--;
+        if(time>=0) countdownEl.textContent = time;
+        if(time<0){
+          clearInterval(timerInterval);
+          clearInterval(emojiInterval);
+          // after countdown show video in loop and show repetir button
+          showVideoAndRepeat();
+        }
+      }, 1000);
+    });
+
+    function showVideoAndRepeat(){
+      // hide countdown and show video
+      countdownEl.style.display='none';
+      const videoArea = document.getElementById('videoArea');
+      videoArea.style.display='flex';
+      video.src = videoSrc;
+      video.loop = true;
+      video.muted = false;
+      // try to play video; some mobile browsers require user interaction (we had button click)
+      video.play().catch(()=>{});
+      repeatBtn.style.display='inline-block';
+      repeatBtn.onclick = ()=>{
+        // reproduce from beginning: reset audio and UI
+        audio.currentTime=0; audio.play().catch(()=>{});
+        resetAll();
+      };
+    }
+
+    // when page loads, hide main button until typing finishes
+    (function init(){
+      btn.style.display='none';
+      // show button after typing finishes
+      typeWriter().then(()=>{ btn.style.display='inline-block'; });
+
+      // make sure button is accessible and styles ok on mobile
+      btn.addEventListener('touchstart', ()=>{btn.style.transform='translateY(-1px)';}, {passive:true});
+      btn.addEventListener('touchend', ()=>{btn.style.transform='translateY(0)';}, {passive:true});
+
+      // small accessibility: if audio playback blocked, clicking any button should start audio
+      document.addEventListener('click', async function onFirstClick(){
+        if(audio.paused){
+          try{ await audio.play(); }catch(e){}
+        }
+      }, {once:true});
+    })();
+
+    // prevent horizontal overflow on very small screens
+    window.addEventListener('resize', ()=>{ document.body.style.height = window.innerHeight + 'px'; });
+    document.body.style.height = window.innerHeight + 'px';
+  </script></body>
 </html>
