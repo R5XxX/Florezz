@@ -32,7 +32,7 @@
       padding-top:80px;
     }
     .top-text{
-      font-size:clamp(18px,4vw,48px);
+      font-size:clamp(36px,6vw,72px);
       letter-spacing:1px;
       color:black;
       text-shadow:2px 2px 6px rgba(255,255,255,0.8);
@@ -42,8 +42,9 @@
       padding-right:10px;
       max-width:90%;
     }
-    #dameButton{
-      margin-top:10px;
+    #dameButton, #repeatButton{
+      position:fixed;
+      bottom:30px;
       padding:12px 22px;
       background:var(--bg-accent);
       color:#000;
@@ -56,9 +57,8 @@
       transition:all 300ms ease;
       box-shadow:0 0 0 rgba(252,252,236,0);
       z-index:11;
-      position:relative;
     }
-    #dameButton.show{
+    #dameButton.show, #repeatButton.show{
       opacity:1;
       transform:scale(1);
       animation:glow 1.5s infinite;
@@ -118,6 +118,7 @@
   <div class="page">
     <div id="topText" class="top-text" aria-live="polite"></div>
     <button id="dameButton" aria-label="Dame clickk">𝑫𝒂𝒎𝒆 𝒄𝒍𝒊𝒄𝒌𝒌</button>
+    <button id="repeatButton" aria-label="Repetir">Repetir</button>
   </div>
   <div id="emojiContainer" aria-hidden="true"></div>
   <div id="countOverlay" role="dialog" aria-hidden="true">
@@ -138,6 +139,7 @@
     const chars=Array.from(text);
     const topText=document.getElementById('topText');
     const dameBtn=document.getElementById('dameButton');
+    const repeatBtn=document.getElementById('repeatButton');
     const emojiContainer=document.getElementById('emojiContainer');
     const countOverlay=document.getElementById('countOverlay');
     const countNumber=document.getElementById('countDownNumber');
@@ -148,16 +150,16 @@ let emojiRunning=false;
 
 function startTyping(){
   let i=0;
+  topText.textContent='';
   const t=setInterval(()=>{
     topText.textContent+=chars[i]??'';
     i++;
     if(i>=chars.length){
       clearInterval(t);
-      setTimeout(()=>{dameBtn.classList.add('show');},400);
+      setTimeout(()=>{dameBtn.classList.add('show'); bgAudio.play().catch(()=>{});},400);
     }
   },typingSpeed);
 }
-startTyping();
 
 function startEmojis(){
   if(emojiRunning) return;
@@ -194,9 +196,8 @@ function showCountdown(seconds){
       countOverlay.setAttribute('aria-hidden','true');
       stopEmojis();
       showVideo();
-    } else {
-      countNumber.textContent=n;
-    }
+      setTimeout(()=>{repeatBtn.classList.add('show');},5000);
+    } else { countNumber.textContent=n; }
   },1000);
 }
 
@@ -205,14 +206,8 @@ function showVideo(){
   userVideo.play().catch(()=>{});
 }
 
-dameBtn.addEventListener('click',()=>{
-  dameBtn.style.display='none';
-  startEmojis();
-  showCountdown(5);
-});
+function resetAnimation(){
+  repeatBtn.classList.remove('show');
+  userVideo.pause();
+  userVideo.currentTime=0;
 
-setTimeout(()=>{bgAudio.play().catch(()=>{});},1000);
-
-  </script>
-</body>
-</html>
