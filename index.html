@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>🌼 Día de las Flores Amarillas 🌼</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: linear-gradient(to top, #fffde7, #fff9c4);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    /* Flor central */
+    .flower {
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, #ffeb3b 40%, #fbc02d 90%);
+      border-radius: 50%;
+      position: relative;
+      animation: grow 3s ease-out forwards;
+    }
+    .flower::before, .flower::after {
+      content: '';
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      background: radial-gradient(circle, #ffeb3b 40%, #fbc02d 90%);
+      border-radius: 50%;
+    }
+    .flower::before { top: -70px; left: 0; }
+    .flower::after { bottom: -70px; left: 0; }
+
+    @keyframes grow {
+      0% { transform: scale(0); }
+      100% { transform: scale(1); }
+    }
+
+    /* Botón Jocelyn */
+    button {
+      position: absolute;
+      bottom: 40px;
+      padding: 12px 24px;
+      font-size: 1.2em;
+      font-weight: bold;
+      background: #fdd835;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: transform 0.2s;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+
+    /* Flores cayendo */
+    .falling-flower {
+      position: fixed;
+      top: -50px;
+      font-size: 2rem;
+      animation: fall linear forwards;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Reproductor oculto */
+    audio {
+      display: none;
+    }
+    .play-btn {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      padding: 10px 20px;
+      border-radius: 10px;
+      border: none;
+      background: #ffeb3b;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="flower"></div>
+
+  <!-- Botón Jocelyn -->
+  <button id="jocelynBtn">🌼 Jocelyn 🌼</button>
+
+  <!-- Botón para reproducir -->
+  <button class="play-btn" id="playBtn">▶️ Música</button>
+
+  <!-- Canción -->
+  <audio id="music" src="tu-cancion.mp3"></audio>
+
+  <script>
+    // Reproducir música
+    const playBtn = document.getElementById("playBtn");
+    const music = document.getElementById("music");
+    let playing = false;
+
+    playBtn.addEventListener("click", () => {
+      if (!playing) {
+        music.play();
+        playBtn.textContent = "⏸️ Pausa";
+        playing = true;
+      } else {
+        music.pause();
+        playBtn.textContent = "▶️ Música";
+        playing = false;
+      }
+    });
+
+    // Flores cayendo al presionar Jocelyn
+    const jocelynBtn = document.getElementById("jocelynBtn");
+    jocelynBtn.addEventListener("click", () => {
+      for (let i = 0; i < 15; i++) {
+        const flower = document.createElement("div");
+        flower.classList.add("falling-flower");
+        flower.textContent = Math.random() > 0.5 ? "🌼" : "🏵";
+        flower.style.left = Math.random() * 100 + "vw";
+        flower.style.animationDuration = (3 + Math.random() * 3) + "s";
+        document.body.appendChild(flower);
+
+        setTimeout(() => flower.remove(), 6000);
+      }
+    });
+  </script>
+</body>
+</html>
