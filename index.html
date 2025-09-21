@@ -2,212 +2,168 @@
 
 <html lang="es">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Jocelyn - Día de las flores amarillas</title>
-  <style>
-    :root{ --bg-accent:#fcfcec; }
-    *{box-sizing:border-box;}
-    html,body{height:100%;margin:0;font-family:'Georgia', serif;overflow:hidden;}
-    body{
-      background-image:url('https://i.imgur.com/umhxdOx.jpeg');
-      background-size:cover;
-      background-position:center;
-      background-repeat:no-repeat;
-      display:flex;
-      align-items:flex-start;
-      justify-content:center;
-      color:#000;
-      position:relative;
-    }
-    .page{
-      position:relative;
-      z-index:10;
-      width:100%;
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:20px;
-      padding-top:80px;
-    }
-    .top-text{
-      font-size:clamp(36px,6vw,72px);
-      letter-spacing:1px;
-      color:black;
-      text-shadow:2px 2px 6px rgba(255,255,255,0.8);
-      white-space:nowrap;
-      overflow:hidden;
-      border-right:2px solid rgba(0,0,0,0);
-      padding-right:10px;
-      max-width:90%;
-    }
-    #dameButton, #repeatButton{
-      position:fixed;
-      bottom:30px;
-      padding:12px 22px;
-      background:var(--bg-accent);
-      color:#000;
-      border:3px solid #000;
-      border-radius:28px;
-      font-size:18px;
-      cursor:pointer;
-      opacity:0;
-      transform:scale(0.95);
-      transition:all 300ms ease;
-      box-shadow:0 0 0 rgba(252,252,236,0);
-      z-index:11;
-    }
-    #dameButton.show, #repeatButton.show{
-      opacity:1;
-      transform:scale(1);
-      animation:glow 1.5s infinite;
-    }
-    @keyframes glow{
-      0%{box-shadow:0 0 6px rgba(255,255,200,0.0);transform:scale(1);}
-      50%{box-shadow:0 0 18px rgba(255,255,200,0.9);transform:scale(1.03);}
-      100%{box-shadow:0 0 6px rgba(255,255,200,0.0);transform:scale(1);}
-    }
-    #emojiContainer{position:absolute;inset:0;pointer-events:none;z-index:12;overflow:hidden;}
-    .emoji{
-      position:absolute;
-      top:-80px;
-      font-size:28px;
-      user-select:none;
-      animation-name:fall,sway,spin;
-      animation-timing-function:linear;
-      animation-iteration-count:1;
-      opacity:0.95;
-    }
-    @keyframes fall{to{transform:translateY(120vh);opacity:0.8;}}
-    @keyframes sway{0%{transform:translateY(0) translateX(0);}50%{transform:translateY(50vh) translateX(14px);}100%{transform:translateY(120vh) translateX(-10px);}}
-    @keyframes spin{0%{transform:rotate(0);}100%{transform:rotate(360deg);}}
-    #countOverlay{
-      position:absolute;
-      inset:0;
-      display:none;
-      align-items:center;
-      justify-content:center;
-      z-index:15;
-      background:rgba(252,252,236,0.95);
-    }
-    #countBox{
-      background:var(--bg-accent);
-      padding:36px 44px;
-      border-radius:16px;
-      border:3px solid #000;
-      box-shadow:0 8px 30px rgba(0,0,0,0.15);
-      text-align:center;
-    }
-    #countDownNumber{font-size:64px;font-weight:700;color:#000;}
-    #userVideo{
-      position:absolute;
-      inset:0;
-      margin:auto;
-      width:min(90vw,1000px);
-      height:auto;
-      display:none;
-      z-index:20;
-      border-radius:12px;
-      box-shadow:0 12px 40px rgba(0,0,0,0.35);
-    }
-    #bgAudio{display:none;}
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Jocelyn - Día de las flores amarillas</title>
+<style>
+:root{--bg-accent:#fcfcec;}
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;font-family:'Georgia', serif;overflow:hidden;}
+body{
+  background-image:url('https://i.imgur.com/umhxdOx.jpeg');
+  background-size:cover;
+  background-position:center;
+  background-repeat:no-repeat;
+  position:relative;
+}
+.page{
+  position:relative;
+  z-index:10;
+  width:100%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding-top:80px;
+}
+.top-text{
+  font-size:clamp(36px,6vw,72px);
+  letter-spacing:1px;
+  color:black;
+  text-shadow:2px 2px 6px rgba(255,255,255,0.8);
+  white-space:nowrap;
+  overflow:hidden;
+  border-right:2px solid rgba(0,0,0,0);
+  padding-right:10px;
+  max-width:90%;
+  z-index:11;
+}
+button{
+  position:fixed;
+  bottom:30px;
+  padding:12px 22px;
+  background:var(--bg-accent);
+  color:#000;
+  border:3px solid #000;
+  border-radius:28px;
+  font-size:18px;
+  cursor:pointer;
+  opacity:0;
+  transform:scale(0.95);
+  transition:all 300ms ease;
+  box-shadow:0 0 0 rgba(252,252,236,0);
+  z-index:12;
+}
+button.show{
+  opacity:1;
+  transform:scale(1);
+  animation:glow 1.5s infinite;
+}
+@keyframes glow{
+  0%{box-shadow:0 0 6px rgba(255,255,200,0.0);transform:scale(1);}
+  50%{box-shadow:0 0 18px rgba(255,255,200,0.9);transform:scale(1.03);}
+  100%{box-shadow:0 0 6px rgba(255,255,200,0.0);transform:scale(1);}
+}
+#emojiContainer{
+  position:absolute;inset:0;
+  pointer-events:none;
+  z-index:13;
+  overflow:hidden;
+}
+.emoji{
+  position:absolute;
+  top:-80px;
+  font-size:28px;
+  user-select:none;
+  animation-name:fall,sway,spin;
+  animation-timing-function:linear;
+  animation-iteration-count:1;
+  opacity:0.95;
+}
+@keyframes fall{to{transform:translateY(120vh);opacity:0.8;}}
+@keyframes sway{0%{transform:translateY(0) translateX(0);}50%{transform:translateY(50vh) translateX(14px);}100%{transform:translateY(120vh) translateX(-10px);}}
+@keyframes spin{0%{transform:rotate(0);}100%{transform:rotate(360deg);}}
+#countOverlay{
+  position:absolute;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:15;
+  background:rgba(252,252,236,0.95);
+}
+#countBox{
+  background:var(--bg-accent);
+  padding:36px 44px;
+  border-radius:16px;
+  border:3px solid #000;
+  box-shadow:0 8px 30px rgba(0,0,0,0.15);
+  text-align:center;
+}
+#countDownNumber{font-size:64px;font-weight:700;color:#000;}
+#userVideo{
+  position:absolute;
+  inset:0;
+  margin:auto;
+  width:min(90vw,1000px);
+  height:auto;
+  display:none;
+  z-index:20;
+  border-radius:12px;
+  box-shadow:0 12px 40px rgba(0,0,0,0.35);
+}
+#bgAudio{display:none;}
+</style>
 </head>
 <body>
-  <div class="page">
-    <div id="topText" class="top-text" aria-live="polite"></div>
-    <button id="dameButton" aria-label="Dame clickk">𝑫𝒂𝒎𝒆 𝒄𝒍𝒊𝒄𝒌𝒌</button>
-    <button id="repeatButton" aria-label="Repetir">Repetir</button>
+<div class="page">
+  <div id="topText" class="top-text" aria-live="polite"></div>
+  <button id="dameButton" aria-label="Dame clickk">𝑫𝒂𝒎𝒆 𝒄𝒍𝒊𝒄𝒌𝒌</button>
+  <button id="repeatButton" aria-label="Repetir">Repetir</button>
+</div>
+<div id="emojiContainer" aria-hidden="true"></div>
+<div id="countOverlay" role="dialog" aria-hidden="true">
+  <div id="countBox">
+    <div id="countDownNumber">5</div>
+    <div style="margin-top:8px;font-size:16px;color:#333">Preparando el video...</div>
   </div>
-  <div id="emojiContainer" aria-hidden="true"></div>
-  <div id="countOverlay" role="dialog" aria-hidden="true">
-    <div id="countBox">
-      <div id="countDownNumber">5</div>
-      <div style="margin-top:8px;font-size:16px;color:#333">Preparando el video...</div>
-    </div>
-  </div>
-  <video id="userVideo" loop playsinline muted>
-    <source src="https://i.imgur.com/uYiwYzE.mp4" type="video/mp4">
-    Tu navegador no soporta video.
-  </video>
-  <audio id="bgAudio" loop>
-    <source src="https://www.dropbox.com/scl/fi/c8682aezsuvkfmwcdixd1/Eres_mixed.mp3?rlkey=bs0i3nubrleqn7ql1xx6ctk9n&st=uvq642vs&dl=1" type="audio/mpeg">
-  </audio>
-  <script>
-    const text="𝑯𝒐𝒍𝒂 𝑱𝒐𝒄𝒆𝒍𝒊𝒏𝒄𝒊𝒕𝒂 𝒃𝒐𝒏𝒊𝒕𝒂 𝒑𝒂𝒓𝒂 𝒕𝒊 🫶🏼";
-    const chars=Array.from(text);
-    const topText=document.getElementById('topText');
-    const dameBtn=document.getElementById('dameButton');
-    const repeatBtn=document.getElementById('repeatButton');
-    const emojiContainer=document.getElementById('emojiContainer');
-    const countOverlay=document.getElementById('countOverlay');
-    const countNumber=document.getElementById('countDownNumber');
-    const userVideo=document.getElementById('userVideo');
-    const bgAudio=document.getElementById('bgAudio');let typingSpeed=70;
-let emojiInterval;
-let emojiRunning=false;
+</div>
+<video id="userVideo" loop playsinline muted>
+  <source src="https://i.imgur.com/uYiwYzE.mp4" type="video/mp4">
+  Tu navegador no soporta video.
+</video>
+<audio id="bgAudio" loop>
+  <source src="https://www.dropbox.com/scl/fi/c8682aezsuvkfmwcdixd1/Eres_mixed.mp3?rlkey=bs0i3nubrleqn7ql1xx6ctk9n&st=uvq642vs&dl=1" type="audio/mpeg">
+</audio>
+<script>
+const text="𝑯𝒐𝒍𝒂 𝑱𝒐𝒄𝒆𝒍𝒊𝒏𝒄𝒊𝒕𝒂 𝒃𝒐𝒏𝒊𝒕𝒂 𝒑𝒂𝒓𝒂 𝒕𝒊 🫶🏼";
+const chars=Array.from(text);
+const topText=document.getElementById('topText');
+const dameBtn=document.getElementById('dameButton');
+const repeatBtn=document.getElementById('repeatButton');
+const emojiContainer=document.getElementById('emojiContainer');
+const countOverlay=document.getElementById('countOverlay');
+const countNumber=document.getElementById('countDownNumber');
+const userVideo=document.getElementById('userVideo');
+const bgAudio=document.getElementById('bgAudio');let typingSpeed=70; let emojiInterval; let emojiRunning=false;
 
-function startTyping(){
-  let i=0;
-  topText.textContent='';
-  const t=setInterval(()=>{
-    topText.textContent+=chars[i]??'';
-    i++;
-    if(i>=chars.length){
-      clearInterval(t);
-      setTimeout(()=>{dameBtn.classList.add('show'); bgAudio.play().catch(()=>{});},400);
-    }
-  },typingSpeed);
-}
+function startTyping(){ topText.textContent=''; let i=0; const t=setInterval(()=>{ topText.textContent+=chars[i]??''; i++; if(i>=chars.length){ clearInterval(t); dameBtn.classList.add('show'); startEmojis(); bgAudio.play().catch(()=>{}); } },typingSpeed); }
 
-function startEmojis(){
-  if(emojiRunning) return;
-  emojiRunning=true;
-  emojiInterval=setInterval(()=>{createEmoji();},220);
-}
-function stopEmojis(){clearInterval(emojiInterval);emojiRunning=false;}
+function startEmojis(){ if(emojiRunning) return; emojiRunning=true; emojiInterval=setInterval(()=>{createEmoji();},220); } function stopEmojis(){clearInterval(emojiInterval);emojiRunning=false;}
 
-const emojiChoices=['🏵','🌼'];
-function createEmoji(){
-  const el=document.createElement('div');
-  el.className='emoji';
-  el.textContent=emojiChoices[Math.floor(Math.random()*emojiChoices.length)];
-  const startX=Math.random()*100;
-  const size=18+Math.random()*36;
-  el.style.left=startX+'vw';
-  el.style.fontSize=size+'px';
-  const duration=3500+Math.random()*4500;
-  el.style.animationDuration=duration+'ms';
-  emojiContainer.appendChild(el);
-  setTimeout(()=>{el.remove();},duration+200);
-}
+const emojiChoices=['🏵','🌼']; function createEmoji(){ const el=document.createElement('div'); el.className='emoji'; el.textContent=emojiChoices[Math.floor(Math.random()*emojiChoices.length)]; const startX=Math.random()*100; const size=18+Math.random()*36; el.style.left=startX+'vw'; el.style.fontSize=size+'px'; const duration=3500+Math.random()*4500; el.style.animationDuration=duration+'ms'; emojiContainer.appendChild(el); setTimeout(()=>{el.remove();},duration+200); }
 
-function showCountdown(seconds){
-  countOverlay.style.display='flex';
-  countOverlay.setAttribute('aria-hidden','false');
-  countNumber.textContent=seconds;
-  let n=seconds;
-  const iv=setInterval(()=>{
-    n--;
-    if(n<0){
-      clearInterval(iv);
-      countOverlay.style.display='none';
-      countOverlay.setAttribute('aria-hidden','true');
-      stopEmojis();
-      showVideo();
-      setTimeout(()=>{repeatBtn.classList.add('show');},5000);
-    } else { countNumber.textContent=n; }
-  },1000);
-}
+function showCountdown(seconds){ countOverlay.style.display='flex'; countOverlay.setAttribute('aria-hidden','false'); countNumber.textContent=seconds; let n=seconds; const iv=setInterval(()=>{ n--; if(n<0){ clearInterval(iv); countOverlay.style.display='none'; countOverlay.setAttribute('aria-hidden','true'); stopEmojis(); showVideo(); setTimeout(()=>{repeatBtn.classList.add('show');},5000); } else { countNumber.textContent=n; } },1000); }
 
-function showVideo(){
-  userVideo.style.display='block';
-  userVideo.play().catch(()=>{});
-}
+function showVideo(){ userVideo.style.display='block'; userVideo.play().catch(()=>{}); }
 
-function resetAnimation(){
-  repeatBtn.classList.remove('show');
-  userVideo.pause();
-  userVideo.currentTime=0;
+function resetAnimation(){ repeatBtn.classList.remove('show'); userVideo.pause(); userVideo.currentTime=0; startTyping(); }
 
+dameBtn.addEventListener('click',()=>{ dameBtn.classList.remove('show'); showCountdown(5); });
+
+repeatBtn.addEventListener('click',()=>{ resetAnimation(); });
+
+startTyping(); </script>
+
+</body>
+</html>
