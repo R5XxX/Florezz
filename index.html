@@ -156,9 +156,9 @@ function showVideo(){ userVideo.style.display='block'; userVideo.play().catch(()
 
 function resetAnimation(){ repeatBtn.classList.remove('show'); userVideo.pause(); userVideo.currentTime=0; startTyping(); }
 
-// Activar música y emojis al primer click en la página let firstClick=false; document.body.addEventListener('click',()=>{ if(!firstClick){ firstClick=true; bgAudio.play().catch(()=>{}); startEmojis(); } });
+// Botón dame clickk siempre activa música, emojis y cuenta regresiva dameBtn.addEventListener('click',()=>{ // Primer toque activa música y emojis si no se ha hecho aún if(!emojiRunning){ bgAudio.play().catch(()=>{}); startEmojis(); } dameBtn.classList.remove('show'); showCountdown(5); });
 
-// Botón dame clickk inicia cuenta regresiva dameBtn.addEventListener('click',()=>{ dameBtn.classList.remove('show'); showCountdown(5); }); repeatBtn.addEventListener('click',()=>{ resetAnimation(); });
+repeatBtn.addEventListener('click',()=>{ resetAnimation(); });
 
 startTyping(); </script>
 
